@@ -35,28 +35,13 @@ Allows users to replace the temporary password issued during account creation.
 
 ---
 
-# Updating Screenshots
 
-1. Save the screenshot in the `screenshots/` folder.
-2. Use a descriptive lowercase filename.
-3. Add a new section:
+## Students Home Screen
 
-```md
-## Screen Name
-
-![Screen Name](screenshots/screenname.jpg)
+![StudentsHomeScren](screenshots/studentshomescreen.jpg)
 
 **Purpose**
 
-Brief description of the screen.
-```
-
-4. Commit both the Markdown file and the image.
+Allows students to see today classes,opt,withdraw,notices,room no,topic teacher name etc.
 
 ---
-
-# Notes
-
-- Keep screenshots up to date after UI changes.
-- Use consistent image dimensions.
-- Avoid including sensitive or personal information.
