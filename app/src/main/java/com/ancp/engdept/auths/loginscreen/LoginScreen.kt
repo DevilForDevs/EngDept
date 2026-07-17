@@ -1,5 +1,6 @@
 package com.ancp.engdept.auths.loginscreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,21 +17,23 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 
 @Composable
-fun LoginScreen() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
 
+   val context= LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,8 +73,8 @@ fun LoginScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
+                    value = viewModel.userId.collectAsState().value,
+                    onValueChange = { viewModel.userId.value = it },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("Username") },
                     singleLine = true
@@ -80,8 +83,8 @@ fun LoginScreen() {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value =viewModel.password.collectAsState().value,
+                    onValueChange = { viewModel.password.value = it },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -92,7 +95,18 @@ fun LoginScreen() {
 
                 Button(
                     onClick = {
-                        // TODO: Login
+                        viewModel.login(
+                            actionCompleted = {user->
+                                if (user.role=="teacher"){
+                                    navController.navigate("teacherHomeScreen")
+                                }else{
+                                    navController.navigate("studentHomeScreen")
+                                }
+                            }, error = {
+                                    message ->
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
